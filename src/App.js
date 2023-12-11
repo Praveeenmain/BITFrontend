@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LoginPage from './components/login';
+import HomePage from './components/HomePage';
+import Gender from './components/Gender';
+import Employment from './components/Employment';
+import UserForm from './components/RegisterForm';
+import NotFound from './components/Notfound';
+import PrivateRoutes from './components/ProtectedRoute';
+import Write from './components/redwar'
+import { useMediaQuery } from 'react-responsive';
 
-function App() {
+const App = () => {
+  // Define media query for larger screens
+  const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1024px)' });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {/* Display entire app on larger screens */}
+        {isDesktopOrLaptop && (
+          <>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<UserForm />} />
+            <Route element={<PrivateRoutes />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/gender" element={<Gender />} />
+              <Route path="/employment-type" element={<Employment />} />
+            </Route>
+            <Route component={NotFound} />
+          </>
+        )}
+
+        {/* Always render the entire app on smaller screens */}
+        {!isDesktopOrLaptop && (
+          <>
+             
+            <Route  path="/login" element={<Write />}  />
+            
+          </>
+        )}
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
